@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StudentEnrollment.Function.Domain.Models
 {
-    internal class StudentEnrollment
+    public class StudentEnrollment
     {
+        public string Forname { get; set; }
+        public string Surname { get; set; }
+        public DateTime Birthdate { get; set; }
+        public int CourseCode { get; set; }
+        public ContactDetails StudentContactDetails { get; set; }
     }
 }

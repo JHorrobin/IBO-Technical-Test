@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace StudentEnrollment.Function.Domain.Models
 {
-    internal class Course
+    public class Course
     {
+        public int CourseId { get; set; }
+        public string Name { get; set; }
+        public DateTime StartDate { get; set; }
+        public List<Student> Students { get; set; }
     }
 }

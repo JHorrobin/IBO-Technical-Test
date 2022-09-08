@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StudentEnrollment.Function.Domain.Models
+﻿namespace StudentEnrollment.Function.Domain.Models
 {
-    internal class PreferredContactMethod
+    public enum PreferredContactMethod
     {
+        Mobile = 0,
+        Email = 1,
+        HomePhone = 2,
     }
 }
