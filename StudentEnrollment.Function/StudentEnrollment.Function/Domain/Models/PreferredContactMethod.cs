@@ -2,8 +2,9 @@
 {
     public enum PreferredContactMethod
     {
-        Mobile = 0,
-        Email = 1,
-        HomePhone = 2,
+        None = 0,
+        Mobile = 1,
+        Email = 2,
+        HomePhone = 3,
     }
 }

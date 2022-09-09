@@ -2,7 +2,7 @@
 
 namespace StudentEnrollment.Function.Domain.Models
 {
-    public class StudentEnrollment
+    public class StudentEnrollmentRequest
     {
         public string Forname { get; set; }
         public string Surname { get; set; }
