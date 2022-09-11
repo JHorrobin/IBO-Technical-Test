@@ -63,7 +63,7 @@ namespace StudentEnrollment.Function.Domain.Services
                         ErrorMessage = "An error has occured whilst saving the data" 
                     };
             }
-            catch // TODO Log Exception Here
+            catch
             {
                 return new StudentEnrollmentResult
                 {
