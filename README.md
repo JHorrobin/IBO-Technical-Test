@@ -23,7 +23,7 @@ The body of the request should look something like this where the CourseCode cor
 [
     {
         "StudentId": 1234,
-        "Forename": ,
+        "Forename": "James",
         "Surname": "Horrobin",
         "Birthdate": "1995-09-27T00:00:00.000Z",
         "CourseCode": 1,
