@@ -4,6 +4,6 @@ namespace StudentEnrollment.Function.Domain
 {
     public interface ICourseDetailsRepository
     {
-        public ReadCourseDetailsDatabaseResult Read();
+        ReadCourseDetailsDatabaseResult Read();
     }
 }

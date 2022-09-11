@@ -6,6 +6,6 @@ namespace StudentEnrollment.Function.Domain
 {
     public interface IStudentEnrollmentService
     {
-        public Task<StudentEnrollmentResult> EnrollStudentsAsync(List<StudentEnrollmentRequest> enrollments);
+        Task<StudentEnrollmentResult> EnrollStudentsAsync(List<StudentEnrollmentRequest> enrollments);
     }
 }
