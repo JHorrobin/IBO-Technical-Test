@@ -4,7 +4,8 @@ namespace StudentEnrollment.Function.Domain.Models
 {
     public class StudentEnrollmentRequest
     {
-        public string Forname { get; set; }
+        public int StudentId { get; set; }
+        public string Forename { get; set; }
         public string Surname { get; set; }
         public DateTime Birthdate { get; set; }
         public int CourseCode { get; set; }

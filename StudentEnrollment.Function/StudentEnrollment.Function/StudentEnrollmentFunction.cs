@@ -1,35 +1,70 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using StudentEnrollment.Function.Domain;
+using StudentEnrollment.Function.Domain.Models;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace StudentEnrollment.Function
 {
-    public static class StudentEnrollmentFunction
+    public class StudentEnrollmentFunction
     {
+        private readonly IStudentEnrollmentService studentEnrollmentService;
+        private readonly IValidator<StudentEnrollmentRequest> validator;
+
+        public StudentEnrollmentFunction(IStudentEnrollmentService studentEnrollmentService, IValidator<StudentEnrollmentRequest> validator)
+        {
+            this.studentEnrollmentService = studentEnrollmentService;
+            this.validator = validator;
+        }
+
         [FunctionName("EnrollStudents")]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation("Enrollment Request Recieved");
 
-            string name = req.Query["name"];
+            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            var data = JsonConvert.DeserializeObject<List<StudentEnrollmentRequest>>(requestBody);
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            var validationError = await ValidateRequests(data);
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            if (string.IsNullOrEmpty(validationError))
+            {
+                var result = await this.studentEnrollmentService.EnrollStudentsAsync(data);
 
-            return new OkObjectResult(responseMessage);
+                return new OkObjectResult(result);
+            }
+            else
+            {
+                return new BadRequestErrorMessageResult(validationError);
+            }
+        }
+
+        private async Task<string> ValidateRequests(List<StudentEnrollmentRequest> requests)
+        {
+            var errorsStringBuilder = new StringBuilder();
+
+            foreach (var request in requests)
+            {
+                var result = await this.validator.ValidateAsync(request);
+                
+                result.Errors.ForEach((e) =>
+                {
+                    errorsStringBuilder.AppendLine(e.ErrorMessage);
+                });
+            }
+
+            return errorsStringBuilder.ToString();
         }
     }
 }
