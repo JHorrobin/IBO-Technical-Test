@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Shouldly;
 using StudentEnrollment.Function.Domain;
@@ -13,6 +14,7 @@ namespace StudentEnrollment.Function.Tests
     {
         private readonly ICoursesRepository coursesRepository;
         private readonly Mock<ISqlDataContext> mockSqlDataContext;
+        private readonly Mock<ILogger<CourseSqlRepository>> mockLogger;
 
         private readonly List<Course> mockData = new List<Course>
         {
@@ -45,7 +47,8 @@ namespace StudentEnrollment.Function.Tests
         public CourseSqlRepositoryTests()
         {
             this.mockSqlDataContext = new Mock<ISqlDataContext>();
-            this.coursesRepository = new CourseSqlRepository(this.mockSqlDataContext.Object);
+            this.mockLogger = new Mock<ILogger<CourseSqlRepository>>();
+            this.coursesRepository = new CourseSqlRepository(this.mockSqlDataContext.Object, this.mockLogger.Object);
         }
 
         [TestMethod]

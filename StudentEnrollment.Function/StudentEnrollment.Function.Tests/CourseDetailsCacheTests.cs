@@ -38,7 +38,7 @@ namespace StudentEnrollment.Function.Tests
         }
 
         [TestMethod]
-        public async Task GetAsync_NoCachedValue_ReturnsCourseDetailsResult()
+        public void GetAsync_NoCachedValue_ReturnsCourseDetailsResult()
         {
             var result = this.courseDetailsCache.Get();
 
@@ -46,14 +46,14 @@ namespace StudentEnrollment.Function.Tests
         }
 
         [TestMethod]
-        public async Task GetAsync_NoCachedValue_CallsRepository()
+        public void GetAsync_NoCachedValue_CallsRepository()
         {
             this.courseDetailsCache.Get();
             this.mockCourseDetailsRepository.Verify(v => v.Read(), Times.Once);
         }
 
         [TestMethod]
-        public async Task GetAsync_NoCachedValue_CreatesCachedValue()
+        public void GetAsync_NoCachedValue_CreatesCachedValue()
         {
             this.courseDetailsCache.Get();
             var newCacheValue = mockMemoryCache.Get<ReadCourseDetailsDatabaseResult>("CourseDetails");
@@ -61,7 +61,7 @@ namespace StudentEnrollment.Function.Tests
         }
 
         [TestMethod]
-        public async Task GetAsync_CachedValue_DoesNotCallRepository()
+        public void GetAsync_CachedValue_DoesNotCallRepository()
         {
             mockMemoryCache.Set("CourseDetails", new ReadCourseDetailsDatabaseResult
             {
@@ -81,7 +81,7 @@ namespace StudentEnrollment.Function.Tests
         }
 
         [TestMethod]
-        public async Task GetAsync_CachedValue_ReturnsCourseDetailsResult()
+        public void GetAsync_CachedValue_ReturnsCourseDetailsResult()
         {
             mockMemoryCache.Set("CourseDetails", new ReadCourseDetailsDatabaseResult
             {

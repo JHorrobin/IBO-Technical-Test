@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Shouldly;
 using StudentEnrollment.Function.Domain;
@@ -14,6 +16,7 @@ namespace StudentEnrollment.Function.Tests
     {
         private readonly ICourseDetailsRepository courseDetailsSqlRepository;
         private readonly Mock<ISqlDataContext> mockSqlDataContext;
+        private readonly Mock<ILogger<CourseDetailsSqlRepository>> mockLogger;
 
         public CourseDetailsSqlRepositoryTests()
         {
@@ -29,8 +32,9 @@ namespace StudentEnrollment.Function.Tests
                     mockRecord.Object
                 });
 
+            this.mockLogger = new Mock<ILogger<CourseDetailsSqlRepository>>();
 
-            this.courseDetailsSqlRepository = new CourseDetailsSqlRepository(this.mockSqlDataContext.Object);
+            this.courseDetailsSqlRepository = new CourseDetailsSqlRepository(this.mockSqlDataContext.Object, this.mockLogger.Object);
         }
 
         [TestMethod]

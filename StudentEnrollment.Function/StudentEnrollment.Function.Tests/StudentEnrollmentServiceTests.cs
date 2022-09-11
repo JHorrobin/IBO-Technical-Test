@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Shouldly;
 using StudentEnrollment.Function.Domain;
@@ -14,6 +16,7 @@ namespace StudentEnrollment.Function.Tests
 
         private readonly Mock<ICoursesRepository> mockCoursesRepository;
         private readonly Mock<ICourseDetailsCache> mockCourseDetailsCache;
+        private readonly Mock<ILogger<StudentEnrollmentService>> mockLogger;
 
         private readonly List<StudentEnrollmentRequest> TestData = new List<StudentEnrollmentRequest>
             {
@@ -57,9 +60,12 @@ namespace StudentEnrollment.Function.Tests
             this.mockCoursesRepository.Setup(s => s.UpdateAsync(It.IsAny<IEnumerable<Course>>()))
                 .ReturnsAsync(new DatabaseResult());
 
+            this.mockLogger = new Mock<ILogger<StudentEnrollmentService>>();
+
             this.studentEnrollmentService = new StudentEnrollmentService(
                 this.mockCoursesRepository.Object, 
-                this.mockCourseDetailsCache.Object);
+                this.mockCourseDetailsCache.Object,
+                this.mockLogger.Object);
         }
 
         [TestMethod]
