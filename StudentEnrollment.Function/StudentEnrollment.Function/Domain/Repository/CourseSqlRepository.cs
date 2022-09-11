@@ -1,4 +1,5 @@
-﻿using StudentEnrollment.Function.Domain.Models;
+﻿using Microsoft.Extensions.Logging;
+using StudentEnrollment.Function.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -13,10 +14,12 @@ namespace StudentEnrollment.Function.Domain.Repository
         private const string UpdateStudentProcedure = "UpdateStudentProcedure";
 
         private readonly ISqlDataContext sqlDataContext;
+        private readonly ILogger<CourseSqlRepository> logger;
 
-        public CourseSqlRepository(ISqlDataContext sqlDataContext)
+        public CourseSqlRepository(ISqlDataContext sqlDataContext, ILogger<CourseSqlRepository> logger)
         {
             this.sqlDataContext = sqlDataContext;
+            this.logger = logger;
         }
 
         public async Task<DatabaseResult> UpdateAsync(IEnumerable<Course> courses)
@@ -66,6 +69,7 @@ namespace StudentEnrollment.Function.Domain.Repository
             }
             catch (Exception exception)
             {
+                this.logger.LogError(exception, exception.Message);
                 return new DatabaseResult { ErrorMessage = exception.Message };
             }
         }
@@ -94,6 +98,7 @@ namespace StudentEnrollment.Function.Domain.Repository
             }
             catch (Exception exception)
             {
+                this.logger.LogError(exception, exception.Message);
                 return new DatabaseResult { ErrorMessage = exception.Message };
             }
         }

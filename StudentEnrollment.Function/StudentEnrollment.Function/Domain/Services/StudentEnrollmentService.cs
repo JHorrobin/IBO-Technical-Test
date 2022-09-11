@@ -1,4 +1,6 @@
-﻿using StudentEnrollment.Function.Domain.Models;
+﻿using Microsoft.Extensions.Logging;
+using StudentEnrollment.Function.Domain.Models;
+using StudentEnrollment.Function.Domain.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +12,13 @@ namespace StudentEnrollment.Function.Domain.Services
     {
         private readonly ICoursesRepository coursesRepository;
         private readonly ICourseDetailsCache courseDetailsCache;
+        private readonly ILogger<StudentEnrollmentService> logger;
 
-        public StudentEnrollmentService(ICoursesRepository coursesRepository, ICourseDetailsCache courseDetailsCache)
+        public StudentEnrollmentService(ICoursesRepository coursesRepository, ICourseDetailsCache courseDetailsCache, ILogger<StudentEnrollmentService> logger)
         {
             this.coursesRepository = coursesRepository;
             this.courseDetailsCache = courseDetailsCache;
+            this.logger = logger;
         }
 
         public async Task<StudentEnrollmentResult> EnrollStudentsAsync(List<StudentEnrollmentRequest> enrollments)
@@ -63,8 +67,9 @@ namespace StudentEnrollment.Function.Domain.Services
                         ErrorMessage = "An error has occured whilst saving the data" 
                     };
             }
-            catch
+            catch(Exception exception)
             {
+                this.logger.LogError(exception, exception.Message);
                 return new StudentEnrollmentResult
                 {
                     ErrorMessage = "An error has occured whilst saving the data"

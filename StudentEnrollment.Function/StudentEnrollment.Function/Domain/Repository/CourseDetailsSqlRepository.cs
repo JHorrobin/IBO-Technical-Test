@@ -1,8 +1,7 @@
-﻿using StudentEnrollment.Function.Domain.Models;
+﻿using Microsoft.Extensions.Logging;
+using StudentEnrollment.Function.Domain.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace StudentEnrollment.Function.Domain.Repository
 {
@@ -11,10 +10,12 @@ namespace StudentEnrollment.Function.Domain.Repository
         private const string ReadCourseDetailsProcedure = "ReadCourseDetailsProcedure";
 
         private readonly ISqlDataContext sqlDataContext;
+        private readonly ILogger<CourseDetailsSqlRepository> logger;
 
-        public CourseDetailsSqlRepository(ISqlDataContext sqlDataContext)
+        public CourseDetailsSqlRepository(ISqlDataContext sqlDataContext, ILogger<CourseDetailsSqlRepository> logger)
         {
             this.sqlDataContext = sqlDataContext;
+            this.logger = logger;
         }
 
         public ReadCourseDetailsDatabaseResult Read()
@@ -37,6 +38,7 @@ namespace StudentEnrollment.Function.Domain.Repository
             }
             catch (Exception exception)
             {
+                this.logger.LogError(exception, exception.Message);
                 return new ReadCourseDetailsDatabaseResult
                 {
                     ErrorMessage = exception.Message

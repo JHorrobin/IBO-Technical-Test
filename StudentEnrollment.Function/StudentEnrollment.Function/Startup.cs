@@ -16,6 +16,8 @@ namespace StudentEnrollment.Function
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddLogging();
+
             builder.Services
                 .AddTransient<IStudentEnrollmentService, StudentEnrollmentService>()
                 .AddTransient<ICoursesRepository, CourseSqlRepository>()
